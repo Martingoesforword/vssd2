@@ -7,12 +7,11 @@ private:
 public:
 	tool_path nowpath;
 	vssd_folder* root;
-	vssd_folder* nowposition;  
+	vssd_folder* getnowposition();  
 	void shownowpositionforcmd();
 	void shownowposition();
 	vssd_foldertop(vssd_folder* root, vssd_folder * genius);
 	void newroot(vssd_folder* root);
-	vssd_folder* find(tool_path &apath);
-	void refresh();
+	vssd_folder* find(tool_path &apath); 
 	~vssd_foldertop();
 }; 

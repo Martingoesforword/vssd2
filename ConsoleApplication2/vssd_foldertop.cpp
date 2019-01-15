@@ -3,6 +3,11 @@
 
 
  
+vssd_folder * vssd_foldertop::getnowposition()
+{
+	return nowpath.getnow();
+}
+
 void vssd_foldertop::shownowpositionforcmd() {
 	std::cout << "VSSD : Now at " ;
 	for (size_t i = 1; i < nowpath.folderlength; i++)
@@ -22,11 +27,10 @@ void vssd_foldertop::shownowposition() {
 }
 vssd_foldertop::vssd_foldertop(vssd_folder * aroot, vssd_folder * agenius)
 {
-	root = aroot;
-	nowposition = aroot;
+	root = aroot; 
 	nowpath.getpath(" \\c:\\", 1);
-	nowpath.getrealpath(agenius);
-	nowpath.getrealpath(aroot);
+	nowpath.setrealpath(agenius,0);
+	nowpath.setrealpath(aroot,1);
 
 }
  
@@ -37,7 +41,7 @@ void vssd_foldertop::newroot(vssd_folder * aroot)
 //根据目前目录位置和相对路径查找
 vssd_folder * vssd_foldertop::find(tool_path & apath)		
 {
-	vssd_folder * nowfolder = nowposition;
+	vssd_folder * nowfolder = getnowposition();
 	for (int i = 0; i < apath.folderlength; i++)
 	{
 		nowfolder = nowfolder->find(apath.folders[i]);
@@ -53,11 +57,7 @@ vssd_folder * vssd_foldertop::find(tool_path & apath)
 }
  
 
-void vssd_foldertop::refresh()
-{
-	nowposition = nowpath.realfolders[nowpath.realfolderlength - 1];
-
-}
+ 
 
 vssd_foldertop::~vssd_foldertop()
 {

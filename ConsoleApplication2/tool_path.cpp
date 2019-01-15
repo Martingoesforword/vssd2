@@ -19,9 +19,10 @@ void tool_path::getpath(std::string apath, int atype)
 	realfoldersize = 100;
 	pathtofolders(apath);
 }
-void tool_path::getrealpath(vssd_folder *apath)
+void tool_path::setrealpath(vssd_folder *apath, int pos)
 {
-	realfolders[realfolderlength++] = apath;
+	realfolderlength++;
+	realfolders[pos] = apath;
 }
 void tool_path::testprint()
 {
@@ -42,6 +43,16 @@ bool tool_path::include(tool_path & path1)
 			}
 		}
 	}
+}
+
+vssd_folder * tool_path::getnowfather()
+{
+	return realfolders[realfolderlength - 2]; 
+}
+
+vssd_folder * tool_path::getnow()
+{
+	return realfolders[realfolderlength - 1];
 }
 
 
@@ -97,8 +108,11 @@ void tool_path::pathtofolders(std::string path)
 			vssd_tool::trim(&nowstring);
 			folders[folderlength++] = nowstring;
 		}
-		else if (nowstring == ".." && folders[folderlength - 1] != "..") {
+		else if (nowstring == ".." &&folderlength>1&& folders[folderlength - 1] != "..") {
 			folderlength--;
+		}
+		else if (nowstring == "..") {
+			folders[folderlength++] = ".."
 		}
 
 	}

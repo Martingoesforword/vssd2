@@ -10,6 +10,8 @@ public:
 	int folderlength;  
 	int foldersize;
 	void pathtofolders(std::string path); //路径字符串到路径对象
+
+	//std::vector<std::string> folders;
 	std::string folders[100];
 	vssd_folder *realfolders[100];
 	int realfolderlength;
@@ -18,8 +20,10 @@ public:
 	void addone(vssd_folder * folder); 
 	tool_path();
 	void getpath(std::string path, int type);
-	void getrealpath(vssd_folder * apath);
+	void setrealpath(vssd_folder * apath,int pos);
 	void testprint();
 	bool include(tool_path & path1);			//未完成
+	vssd_folder *getnowfather();
+	vssd_folder *getnow();
 	~tool_path();
 }; 
