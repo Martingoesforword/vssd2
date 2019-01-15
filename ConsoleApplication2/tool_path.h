@@ -18,8 +18,10 @@ public:
 	void addone(vssd_folder * folder); 
 	tool_path();
 	void getpath(std::string path, int type);
-	void getrealpath(vssd_folder * apath);
+	void setrealpath(vssd_folder * apath,int pos);
 	void testprint();
 	bool include(tool_path & path1);			//Î´Íê³É
+	vssd_folder *getnowfather();
+	vssd_folder *getnow();
 	~tool_path();
 }; 

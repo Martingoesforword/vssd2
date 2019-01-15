@@ -3,7 +3,7 @@
 //当下文件夹下dir
 void tool_vcmd::vdir(vssd_foldertop * top)
 {
-	top->nowposition->showoffsub();
+	top->getnowposition()->showoffsub();
 }
 //当下文件夹下cd
 void tool_vcmd::vcd(vssd_foldertop * mytop) 
@@ -14,10 +14,9 @@ void tool_vcmd::vcd(vssd_foldertop * mytop)
 //当下文件夹下rd
 void tool_vcmd::vrd(vssd & myvssd) {
 	if (myvssd.getnowtop()->nowpath.realfolderlength >= 3) {
-		myvssd.getnowtop()->nowpath.realfolders[myvssd.getnowtop()->nowpath.realfolderlength - 2]->deletone(myvssd.getnowtop()->nowposition);
+		myvssd.getnowtop()->nowpath.realfolders[myvssd.getnowtop()->nowpath.realfolderlength - 2]->deletone(myvssd.getnowtop()->getnowposition());
 
-		myvssd.getnowtop()->nowpath.deletone();
-		myvssd.getnowtop()->refresh();
+		myvssd.getnowtop()->nowpath.deletone(); 
 		std::cout << "VSSD ERROR : Nowposition folder is deleted just！" << std::endl;
 	}
 	else {
@@ -56,75 +55,62 @@ void tool_vcmd::vdir(vssd & myvssd, std::string & dircommand)
 			 
 }
 
-vssd_folder * tool_vcmd::v_findpath(vssd & myvssd, std::string & dircommand, tool_path &apath)
+vssd_folder * tool_vcmd::v_findpath(vssd & myvssd, std::string & pathcommand, tool_path &apath)
 {
 	vssd_foldertop *mytop = myvssd.getnowtop();
-	static tool_path nowpath = mytop->nowpath; 
-	std::string a = dircommand;
-	vssd_tool::trim(&a);
-	if (a.length() == 2 && a.at(1) == ':') {	//直接跳长度为2的盘符名  dir d:    不可dir d:\
+	static tool_path nowpath;
+	nowpath = mytop->nowpath;//目前位置
+	//nowpath
+	std::string pathstring = pathcommand;
+	vssd_tool::trim(&pathstring); 
+	tool_path path;
+	path.pathtofolders(pathstring);
+	//path，pathstring
+	vssd_folder * longnowf = nowpath.getnow();	
 
-		vssd_foldertop* top = myvssd.findtop(a); 
-		return top->root;
-	}
-	else if (a.compare("..") == 0) {
-		if (nowpath.folderlength >= 3) {
-			nowpath.folderlength--;
-			nowpath.realfolderlength--;
-			return nowpath.realfolders[nowpath.realfolderlength - 1];
-		}
-		else {		
-
-			return nullptr;
-		}
-
-	}
-	else if (a.compare(".") == 0) {
-		return  mytop->nowposition;
-	}
-	else {
-		tool_path dirrear_path;
-		dirrear_path.pathtofolders(a);
-
-		vssd_folder * longnowf = nowpath.realfolders[nowpath.realfolderlength - 2];
-		for (int i = 0; i < dirrear_path.folderlength; i++)
-		{
-			//说明是磁盘开头，则为绝对路径
-			if (dirrear_path.folders[i].length() == 2 && dirrear_path.folders[i].at(1) == ':') {
-				nowpath.folderlength = 1;
-				nowpath.realfolderlength = 1;
-				nowpath.folders[0] = "";
-				nowpath.realfolders[0] = myvssd.getgenius();
-				longnowf = nowpath.realfolders[nowpath.realfolderlength - 1]->find(dirrear_path.folders[i]);
-				if (!longnowf) { 
-					return nullptr;
-				}
-				nowpath.addone(longnowf);
+	int flag_tofirstif = 1;
+	for (int i = 0; i < path.folderlength; i++)
+	{
+		//说明是磁盘开头，则为绝对路径
+		if (flag_tofirstif && path.folders[i].length() == 2 && path.folders[i].at(1) == ':') {
+			nowpath.folderlength = 1;
+			nowpath.realfolderlength = 0;
+			nowpath.folders[0] = "";
+			nowpath.setrealpath(myvssd.getgenius(),0) ; 
+			longnowf = nowpath.getnow()->find(path.folders[i]);
+			if (!longnowf) {
+				return nullptr;
 			}
-			else if (dirrear_path.folders[i] == "..") {
-				if (nowpath.realfolderlength < 3) {
-					return nullptr;
-				}
-				else {
-					nowpath.deletone();
-				}
-
-			}
-			else if (dirrear_path.folders[i] == ".") {
+			nowpath.addone(longnowf);
+			flag_tofirstif = 0;
+		}
+		else if (path.folders[i] == "..") {
+			if (nowpath.realfolderlength < 3) {
+				return nullptr;
 			}
 			else {
-				longnowf = longnowf->find(dirrear_path.folders[i]);
-				if (!longnowf) {
-					return nullptr;
-				}
-				nowpath.addone(longnowf);
+				nowpath.deletone();
 			}
 
-		} 
-		 
-		apath = nowpath; 
-		return nowpath.realfolders[nowpath.realfolderlength - 1];
+		}
+		else if (path.folders[i] == ".") {
+
+		}
+		//路径中非'n:' '..' '.'
+		else {
+			longnowf = longnowf->find(path.folders[i]);
+			if (!longnowf) {
+				return nullptr;
+			}
+			nowpath.addone(longnowf);
+		}
+
 	}
+
+	apath = nowpath;
+	return longnowf;
+	 
+	 
 }
 
 void tool_vcmd::vcd(vssd & myvssd, std::string & cdcommand)
@@ -150,8 +136,8 @@ void tool_vcmd::vren(vssd & myvssd, std::string & rencommand) {
 
 
 	if (!myvssd.getnowtop()->nowpath.realfolders[myvssd.getnowtop()->nowpath.realfolderlength - 2]->find(rencommand)) {
-		if (myvssd.getnowtop()->nowposition->getname() != myvssd.getnowtop()->root->getname())
-			myvssd.getnowtop()->nowposition->setname(rencommand);
+		if (myvssd.getnowtop()->getnowposition()->getname() != myvssd.getnowtop()->root->getname())
+			myvssd.getnowtop()->getnowposition()->setname(rencommand);
 	}
 	else {
 		std::cout << "VSSD ERROR : The folder has already existed! " << std::endl;
@@ -179,30 +165,19 @@ void tool_vcmd::vmd(vssd & myvssd, std::string & mdcommand)
 	vssd_folder * folder = v_findpath(myvssd, mdcommand, a);
 
 	
+	
 	if (!folder) {
 		a.pathtofolders(mdcommand);
-		if (a.folderlength >= 2) {
-			if(myvssd.findtop(a.folders[0]))
-				myvssd.findtop(a.folders[0])->root->build(a);
-		}
-	}
-	else { 
-		std::cout << "VSSD ERROR : This folder has existed! " << std::endl;
-	}
-
-	tool_path mdpath;
-	mdpath.getpath(mdcommand,2);
-	if (mdpath.folderlength == 1) {
-		if (!myvssd.getnowtop()->nowposition->find(mdpath.folders[0])) {
-			vssd_folder *newfolder = new vssd_folder(mdpath.folders[0]);
-			myvssd.getnowtop()->nowposition->vssd_folder_link(newfolder);
+		if (a.folders[0].at(1) != ':') {
+			myvssd.getnowtop()->getnowposition()->build(a);
 		}
 		else {
-			std::cout << "VSSD ERROR : The folder has already existed! " << std::endl;
+			myvssd.getgenius()->build(a);
 		}
-		
+		 
 	}
-
+	 
+	 
 	
 }
 //移动文件夹
@@ -229,7 +204,7 @@ void tool_vcmd::vmove(vssd & myvssd, std::string & dis) {
 	tool_path b;
 	vssd_folder * disfolder = v_findpath(myvssd, dis, b); 
 	if (disfolder) {
-		disfolder->vssd_folder_link(myvssd.getnowtop()->nowposition);
+		disfolder->vssd_folder_link(myvssd.getnowtop()->getnowposition());
 	}
 	else {
 		std::cout << "VSSD ERROR : This folder is not exist! " << std::endl;

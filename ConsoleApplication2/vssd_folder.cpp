@@ -46,7 +46,7 @@ void vssd_folder::build(tool_path &a) {
 	 
 	vssd_folder *now = this;
 	int flag = 0;
-	for (int i = 1; i < a.folderlength; i++)
+	for (int i = 0; i < a.folderlength; i++)
 	{	
 		if (flag || !now->find(a.folders[i])) {
 			vssd_folder *f1 = new vssd_folder(a.folders[i]);
@@ -159,14 +159,14 @@ void vssd_folder::offone(vssd_folder * deletfolder)
 			if (subfolders[j] == NULL) {
 				continue;
 			}
-			else {
-
+			else { 
 				break;
 			}
 		}
 
 		if (subfolders[j]->getname() == deletfolder->getname()) { 
 			folderlength--;
+			subfolders[j] = nullptr;
 			return;
 		}
 		else {
@@ -230,23 +230,17 @@ vssd_folder * vssd_folder::find(std::string & folder)
 	for (int i = 0; i < folderlength; i++)
 	{  
 		 
-		for (; j < foldersize; j++)
-		{
-			if (subfolders[j] == NULL) { 
-				continue;
+		if (subfolders[j] != NULL) {
+			if (subfolders[j]->getname() == folder) {
+
+				return subfolders[j];
 			}
 			else {
-				
+				j++;
+			}
+			if (j > foldersize) {
 				break;
 			}
-		}
-		
-		if (subfolders[j]->getname() == folder) {
-			
-			return subfolders[j];
-		}
-		else {
-			j++; 
 		}
 
 	}
