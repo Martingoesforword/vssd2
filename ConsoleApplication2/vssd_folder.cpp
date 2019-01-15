@@ -48,14 +48,14 @@ void vssd_folder::build(tool_path &a) {
 	int flag = 0;
 	for (int i = 0; i < a.folderlength; i++)
 	{	
-		if (flag || !now->find(a.folders.at(i))) {
-			vssd_folder *f1 = new vssd_folder(a.folders.at(i));
+		if (flag || !now->find(a.folders[i])) {
+			vssd_folder *f1 = new vssd_folder(a.folders[i]);
 			now->vssd_folder_link(f1);
 			now = f1;
 			flag = 1;
 		}
 		else {
-			now = now->find(a.folders.at(i));
+			now = now->find(a.folders[i]);
 		}
 		
 
@@ -83,8 +83,8 @@ void vssd_folder::showoffsub() {
 		
 	defeatfolder:
 		
-		if (subfolders.at(p) != NULL) {
-			std::cout << subfolders.at(p]->name <<"\t<"<< subfolders [p)->gettype()<<">\t无大小"<< std::endl;
+		if (subfolders[p] != NULL) {
+			std::cout << subfolders[p]->name <<"\t<"<< subfolders [p]->gettype()<<">\t无大小"<< std::endl;
 		}
 		else { p++; goto defeatfolder;}
 		p++;
@@ -95,8 +95,8 @@ void vssd_folder::showoffsub() {
 
 	defeatlink:
 
-		if (subfolders.at(p) != NULL) {
-			std::cout << subfolders.at(p]->name << "\t<" << subfolders[p)->gettype() << ">\t无大小" << std::endl;
+		if (subfolders[p] != NULL) {
+			std::cout << subfolders[p]->name << "\t<" << subfolders[p]->gettype() << ">\t无大小" << std::endl;
 			p++;
 		}
 		else { p++;  goto defeatlink; }
@@ -108,8 +108,8 @@ void vssd_folder::showoffsub() {
 
 	defeatfile:
 
-		if (subfolders.at(p) != NULL) {
-			std::cout << subfolders.at(p]->name << "\t<" << subfolders[p]->gettype() << ">\t" << subfolders[p)->filesize << "KB" << std::endl;
+		if (subfolders[p] != NULL) {
+			std::cout << subfolders[p]->name << "\t<" << subfolders[p]->gettype() << ">\t" << subfolders[p]->filesize << "KB" << std::endl;
 			p++;
 		}
 		else { p++; goto defeatfile; }
@@ -125,7 +125,7 @@ void vssd_folder::deletone(vssd_folder * deletfolder)
 
 		for (; j < foldersize; j++)
 		{
-			if (subfolders.at(j) == NULL) {
+			if (subfolders[j] == NULL) {
 				continue;
 			}
 			else {
@@ -134,10 +134,10 @@ void vssd_folder::deletone(vssd_folder * deletfolder)
 			}
 		}
 
-		if (subfolders.at(j)->getname() == deletfolder->getname()) {
-			subfolders.at(j)->deletevery();
-			subfolders.at(j)->~vssd_folder();
-			subfolders.at(j) = nullptr;
+		if (subfolders[j]->getname() == deletfolder->getname()) {
+			subfolders[j]->deletevery();
+			subfolders[j]->~vssd_folder();
+			subfolders[j] = nullptr;
 			folderlength--;
 			return;
 		}
@@ -156,7 +156,7 @@ void vssd_folder::offone(vssd_folder * deletfolder)
 
 		for (; j < foldersize; j++)
 		{
-			if (subfolders.at(j) == NULL) {
+			if (subfolders[j] == NULL) {
 				continue;
 			}
 			else { 
@@ -164,9 +164,9 @@ void vssd_folder::offone(vssd_folder * deletfolder)
 			}
 		}
 
-		if (subfolders.at(j)->getname() == deletfolder->getname()) { 
+		if (subfolders[j]->getname() == deletfolder->getname()) { 
 			folderlength--;
-			subfolders.at(j) = nullptr;
+			subfolders[j] = nullptr;
 			return;
 		}
 		else {
@@ -183,12 +183,12 @@ void vssd_folder::deletevery() {
 
 		for (; j < foldersize; j++)
 		{
-			if (subfolders.at(j) == NULL) {
+			if (subfolders[j] == NULL) {
 				continue;
 			}
 			else {
-				subfolders.at(j)->deletevery();
-				subfolders.at(j)->~vssd_folder();
+				subfolders[j]->deletevery();
+				subfolders[j]->~vssd_folder();
 				break;
 			}
 		}
@@ -211,8 +211,8 @@ vssd_folder ** vssd_folder::findnext() {
 	if (folderlength < foldersize) {
 		for (int i = 0; i < foldersize; i++)
 		{
-			if (subfolders.at(i) == nullptr) {
-				return &subfolders.at(i);
+			if (subfolders[i] == nullptr) {
+				return &subfolders[i];
 			}
 
 		}
@@ -230,10 +230,10 @@ vssd_folder * vssd_folder::find(std::string & folder)
 	for (int i = 0; i < folderlength; i++)
 	{  
 		 
-		if (subfolders.at(j) != NULL) {
-			if (subfolders.at(j)->getname() == folder) {
+		if (subfolders[j] != NULL) {
+			if (subfolders[j]->getname() == folder) {
 
-				return subfolders.at(j);
+				return subfolders[j];
 			}
 			else {
 				j++;
@@ -251,7 +251,7 @@ vssd_folder * vssd_folder::find(tool_path * apath, int pathpos)
 {
 
 	vssd_folder* reserchout;
-	reserchout = find(apath->folders.at(0));
+	reserchout = find(apath->folders[0]);
 	 
 	return nullptr;
 	 

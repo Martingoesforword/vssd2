@@ -112,7 +112,7 @@ void tool_path::pathtofolders(std::string path)
 			folderlength--;
 		}
 		else if (nowstring == "..") {
-			folders[folderlength++] = ".."
+			folders[folderlength++] = "..";
 		}
 
 	}
