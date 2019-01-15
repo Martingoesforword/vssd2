@@ -7,13 +7,15 @@ private:
 	vssd_foldertop *tops[100];
 	int tabletops_size = 100;
 	int tabletops_length = 0;
-	
+	vssd_folder *genius;
 public: 
 	vssd_foldertop *getnowtop();
+	vssd_folder *getgenius();
 	void setnowtop(vssd_foldertop * afoldertop);
 	void linktop(vssd_foldertop *anowtop);
-	vssd(vssd_foldertop * Now, std::string aname);
-	vssd(std::string aname);
+	vssd(vssd_foldertop * Now, vssd_folder * agenius, std::string aname);
+
+	vssd();
 	vssd_foldertop *findtop(std::string &aname);
 	
 	~vssd();

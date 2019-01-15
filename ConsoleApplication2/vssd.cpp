@@ -4,12 +4,17 @@
 vssd_foldertop * vssd::getnowtop()
 {
 	return nowtop;
-} 
+}
+vssd_folder * vssd::getgenius()
+{
+	return genius;
+}
 void vssd::setnowtop(vssd_foldertop * afoldertop)
 {
 	nowtop = afoldertop;
-
 }
+ 
+ 
 
 void vssd::linktop(vssd_foldertop * anowtop)
 {
@@ -22,17 +27,20 @@ void vssd::linktop(vssd_foldertop * anowtop)
 	}
 	
 }
+
+vssd::vssd(vssd_foldertop * Now, vssd_folder * agenius, std::string aname)
+{
+	nowtop = Now;
+	name = aname;
+	genius = agenius;
+}
+
  
-vssd::vssd(vssd_foldertop *anow,std::string aname)
+vssd::vssd()
 {
-	nowtop = anow;
-	name = aname;
+	
 }
-vssd::vssd(std::string aname)
-{
-	nowtop = NULL;
-	name = aname;
-}
+ 
 vssd_foldertop * vssd::findtop(std::string & aname)
 {
 	for (int i = 0; i < tabletops_length; i++)

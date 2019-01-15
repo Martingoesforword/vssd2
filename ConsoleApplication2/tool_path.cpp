@@ -31,6 +31,19 @@ void tool_path::testprint()
 	}
 }
 
+bool tool_path::include(tool_path & path1)
+{
+	for (int i = 1; i < path1.folderlength; i++)
+	{
+		if (path1.folders[i] == folders[i]) continue;
+		else {
+			if (path1.folderlength == folderlength) {
+				return 0;
+			}
+		}
+	}
+}
+
 
 void tool_path::pathtofolders(std::string path)
 {

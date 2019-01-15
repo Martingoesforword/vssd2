@@ -20,6 +20,6 @@ public:
 	void getpath(std::string path, int type);
 	void getrealpath(vssd_folder * apath);
 	void testprint();
-	
+	bool include(tool_path & path1);			//Î´Íê³É
 	~tool_path();
 }; 
