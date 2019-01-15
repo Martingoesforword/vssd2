@@ -13,7 +13,7 @@ void tool_vcmd::vcd(vssd_foldertop * mytop)
 }
 //当下文件夹下rd
 void tool_vcmd::vrd(vssd & myvssd) {
-	if (myvssd.getnowtop()->nowpath.realfolderlength >= 2) {
+	if (myvssd.getnowtop()->nowpath.realfolderlength >= 3) {
 		myvssd.getnowtop()->nowpath.realfolders[myvssd.getnowtop()->nowpath.realfolderlength - 2]->deletone(myvssd.getnowtop()->nowposition);
 
 		myvssd.getnowtop()->nowpath.deletone();
@@ -27,20 +27,18 @@ void tool_vcmd::vrd(vssd & myvssd) {
 
 }
 
-void tool_vcmd::vrd(vssd & myvssd, std::string & dircommand)
+void tool_vcmd::vrd(vssd & myvssd, std::string & rdcommand)
 {
-	std::string aa = dircommand;
-	vssd_tool::trim(aa);
-	vssd_folder * f = myvssd.getnowtop()->nowposition->find(aa);
-	if (f == nullptr) {
-		//未发现			//还是通过链表实现比较好
-		std::cout << "VSSD ERROR : The folder is not exist! " << std::endl;
+	tool_path a;
+	vssd_folder * folder = v_findpath(myvssd, rdcommand, a);
+	if (folder && a.folderlength >= 3) {
+		a.realfolders[a.realfolderlength - 2]->deletone(folder); 
 	}
 	else {
-		 //删除某个文件夹，应该是父文件夹的功能
-		myvssd.getnowtop()->root->deletone(f);
-
+		std::cout << "VSSD ERROR : This folder is not exist! " << std::endl;
 	}
+
+	 
 }
 
 void tool_vcmd::vdir(vssd & myvssd, std::string & dircommand)
@@ -88,7 +86,7 @@ vssd_folder * tool_vcmd::v_findpath(vssd & myvssd, std::string & dircommand, too
 		tool_path dirrear_path;
 		dirrear_path.pathtofolders(a);
 
-		vssd_folder * longnowf;
+		vssd_folder * longnowf = nowpath.realfolders[nowpath.realfolderlength - 2];
 		for (int i = 0; i < dirrear_path.folderlength; i++)
 		{
 			//说明是磁盘开头，则为绝对路径
@@ -115,7 +113,7 @@ vssd_folder * tool_vcmd::v_findpath(vssd & myvssd, std::string & dircommand, too
 			else if (dirrear_path.folders[i] == ".") {
 			}
 			else {
-				longnowf = nowpath.realfolders[nowpath.realfolderlength - 1]->find(dirrear_path.folders[i]);
+				longnowf = longnowf->find(dirrear_path.folders[i]);
 				if (!longnowf) {
 					return nullptr;
 				}
