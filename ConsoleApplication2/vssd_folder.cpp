@@ -5,15 +5,17 @@ void vssd_folder::vssd_folder_init()
 
 std::string vssd_folder::gettype()
 {
-	return vssdtypename;
+	return vssdtypename[vssdtypecode];
 }
 
-vssd_folder::vssd_folder(std::string aname)
+vssd_folder::vssd_folder(std::string aname, int acode)
 {
 	name = aname;
+	vssdtypecode = acode;
 	vssd_folder_init();
-
+	
 }
+ 
 
 void vssd_folder::vssd_folder_link(vssd_folder *linktosub)
 {
@@ -39,7 +41,7 @@ void vssd_folder::build(tool_path &a) {
 	for (int i = 0; i < a.folders.size(); i++)
 	{	
 		if (flag || !now->find(a.folders[i])) {
-			vssd_folder *f1 = new vssd_folder(a.folders[i]);
+			vssd_folder *f1 = new vssd_folder(a.folders[i],1);
 			now->vssd_folder_link(f1);
 			now = f1;
 			flag = 1;
@@ -213,6 +215,33 @@ vssd_folder * vssd_folder::find(tool_path * apath, int pathpos)
 	 
 }
  
+void vssd_folder::setcontent(unsigned char byte)		//追加字符
+{
+	if (isFile()) {
+		content.push_back(byte);
+	}
+	else {
+		std::cout << "Can not write to or read from a folder or a link" << std:: endl;
+	}
+}
+
+unsigned char vssd_folder::readcontent()			//返回NULL 和 下一个字符
+{
+	static int index = -1;
+	if (isFile()) {
+		std::vector<unsigned char>::iterator it = content.begin(); 
+		index++;
+		if(it + index != content.end())
+			return *(it+ index);
+		else {
+			return NULL;
+		}
+	}
+	else {
+		std::cout << "Can not write to or read from a folder or a link" << std::endl;
+	}
+}
+
 vssd_folder::~vssd_folder()
 {
 }

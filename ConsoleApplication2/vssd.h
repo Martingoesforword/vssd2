@@ -15,7 +15,9 @@ public:
 
 	vssd();
 	vssd_foldertop *findtop(std::string &aname);
-	
+	void puttorealfile(FILE *d);
+	void getfromrealfile(FILE *d);
+
 	~vssd();
 };
  

@@ -50,6 +50,15 @@ vssd_foldertop * vssd::findtop(std::string & aname)
 	}
 	return nullptr; 
 }
+
+void vssd::puttorealfile(FILE * d)
+{
+
+}
+
+void vssd::getfromrealfile(FILE * d)
+{
+}
  
 
 vssd::~vssd()

@@ -11,7 +11,7 @@ public:
 	 
 	 
 	virtual std::string gettype();
-	vssd_folder(std::string name); 
+	vssd_folder(std::string name, int code); 
 	void vssd_folder_link(vssd_folder * linktosub);
 	std::string getname();
 	void build(tool_path & a); 
@@ -24,7 +24,14 @@ public:
 	vssd_folder ** findnext(); 
 	vssd_folder *find(std::string &folder);//搜索本目录下文件
 	vssd_folder *find(tool_path * apath,int pathpos);//搜索本目录下包括子目录文件
-	std::string vssdtypename = "FOLDER";
+	std::string vssdtypename[3] = { "FILE","FOLDER", "LINK" };
 	int vssdtypecode;    //0 file 1 folder 2 link
+	std::vector<unsigned char> content;		//文件内容 
+	bool isFile() {
+		if (!vssdtypecode) return true;
+		else return false;
+	}
+	void setcontent(unsigned char byte);
+	unsigned char readcontent();
 	~vssd_folder();
 };
