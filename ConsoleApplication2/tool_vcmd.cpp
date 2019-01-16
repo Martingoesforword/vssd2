@@ -186,7 +186,7 @@ void tool_vcmd::vmd(vssd & myvssd, std::string & mdcommand)
 			myvssd.getnowtop()->getnowposition()->build(myvssd,a);
 		}
 		else {
-			myvssd.getgenius()->build(myvssd,a);  
+			myvssd.getgenius()->build(myvssd,a);
 		}
 		 
 	}

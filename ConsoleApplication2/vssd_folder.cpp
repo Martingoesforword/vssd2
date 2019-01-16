@@ -5,15 +5,17 @@ void vssd_folder::vssd_folder_init()
 
 std::string vssd_folder::gettype()
 {
-	return vssdtypename;
+	return vssdtypename[vssdtypecode];
 }
 
-vssd_folder::vssd_folder(std::string aname)
+vssd_folder::vssd_folder(std::string aname, int acode)
 {
 	name = aname;
+	vssdtypecode = acode;
 	vssd_folder_init();
-
+	
 }
+ 
 
 void vssd_folder::vssd_folder_link(vssd_folder *linktosub)
 {
@@ -31,21 +33,21 @@ std::string vssd_folder::getname()
 	return name;
 }
 
-void vssd_folder::build(tool_path &a) {
+void vssd_folder::build(vssd & myvssd, tool_path &a) {
 	 
 	 
-	vssd_folder *now = this;
+	vssd_folder *now = myvssd.getnowtop()->getnowposition();
 	int flag = 0;
 	for (int i = 0; i < a.folders.size(); i++)
 	{	
-		if (flag || !now->find(a.folders.at(i))) {
-			vssd_folder *f1 = new vssd_folder(a.folders.at(i));
+		if (flag || !now->find(a.folders[i])) {
+			vssd_folder *f1 = new vssd_folder(a.folders[i],1);
 			now->vssd_folder_link(f1);
 			now = f1;
 			flag = 1;
 		}
 		else {
-			now = now->find(a.folders.at(i));
+			now = now->find(a.folders[i]);
 		}
 		
 
@@ -69,45 +71,12 @@ void vssd_folder::showoffsub() {
 	defeatfolder:
 		
 		if (subfolders.at(p) != NULL) {
-<<<<<<< HEAD
-			std::cout << subfolders.at(p]->name <<"\t<"<< subfolders [p)->gettype()<<">\t无大小"<< std::endl;
-=======
-			std::cout << subfolders.at(p)->name <<"\t<"<< subfolders [p]->gettype()<<">\t无大小"<< std::endl;
->>>>>>> 鍏ㄩ儴淇敼涓烘硾鍨?
+			std::cout << subfolders.at(p)->name <<"\t\t<"<< subfolders [p]->gettype()<< ">\t" << subfolders[p]->content.size()* sizeof(unsigned char)<< "Byte\t"<< std::endl;
 		}
 		else { p++; goto defeatfolder;}
 		p++;
 	}
-<<<<<<< HEAD
-	p = 0;
-	for (size_t i = 0; i < linklength; i++)
-	{
-
-	defeatlink:
-
-		if (subfolders.at(p) != NULL) {
-			std::cout << subfolders.at(p]->name << "\t<" << subfolders[p)->gettype() << ">\t无大小" << std::endl;
-			p++;
-		}
-		else { p++;  goto defeatlink; }
-		
-	}
-	p = 0;
-	for (size_t i = 0; i < filelength; i++)
-	{
-
-	defeatfile:
-
-		if (subfolders.at(p) != NULL) {
-			std::cout << subfolders.at(p]->name << "\t<" << subfolders[p]->gettype() << ">\t" << subfolders[p)->filesize << "KB" << std::endl;
-			p++;
-		}
-		else { p++; goto defeatfile; }
-		 
-	}
-=======
 	 
->>>>>>> 鍏ㄩ儴淇敼涓烘硾鍨?
 }
 
 void vssd_folder::deletone(vssd_folder * deletfolder)
@@ -130,14 +99,9 @@ void vssd_folder::deletone(vssd_folder * deletfolder)
 		if (subfolders.at(j)->getname() == deletfolder->getname()) {
 			subfolders.at(j)->deletevery();
 			subfolders.at(j)->~vssd_folder();
-<<<<<<< HEAD
-			subfolders.at(j) = nullptr;
-			folderlength--;
-=======
 			std::vector<vssd_folder *>::iterator it = subfolders.begin();
 			 
 			subfolders.erase(it + j);
->>>>>>> 鍏ㄩ儴淇敼涓烘硾鍨?
 			return;
 		}
 		else {
@@ -164,13 +128,8 @@ void vssd_folder::offone(vssd_folder * deletfolder)
 		}
 
 		if (subfolders.at(j)->getname() == deletfolder->getname()) { 
-<<<<<<< HEAD
-			folderlength--;
-			subfolders.at(j) = nullptr;
-=======
 			std::vector<vssd_folder*>::iterator it = subfolders.begin(); 
 			subfolders.erase(it + j); 
->>>>>>> 鍏ㄩ儴淇敼涓烘硾鍨?
 			return;
 		}
 		else {
@@ -250,12 +209,59 @@ vssd_folder * vssd_folder::find(tool_path * apath, int pathpos)
 {
 
 	vssd_folder* reserchout;
-	reserchout = find(apath->folders.at(0));
+	reserchout = find(apath->folders[0]);
 	 
 	return nullptr;
 	 
 }
  
+bool vssd_folder::isFile()
+{
+	if (!vssdtypecode) return true;
+	else return false;
+		
+	 
+}
+
+void vssd_folder::setcontent(unsigned char byte)		//追加字符
+{
+	if (isFile()) {
+		content.push_back(byte);
+	}
+	else {
+		std::cout << "Can not write to or read from a folder or a link" << std:: endl;
+	}
+}
+void vssd_folder::setcontentstring(std::string str)		//追加字符
+{
+	if (isFile()) {
+		for (int i = 0; i < str.length(); i++)
+		{
+			content.push_back(str.at(i));
+		}
+		
+	}
+	else {
+		std::cout << "Can not write to or read from a folder or a link" << std::endl;
+	}
+}
+unsigned char vssd_folder::readcontent()			//返回NULL 和 下一个字符
+{
+	static int index = -1;
+	if (isFile()) {
+		std::vector<unsigned char>::iterator it = content.begin(); 
+		index++;
+		if(it + index != content.end())
+			return *(it+ index);
+		else {
+			return NULL;
+		}
+	}
+	else {
+		std::cout << "Can not write to or read from a folder or a link" << std::endl;
+	}
+}
+
 vssd_folder::~vssd_folder()
 {
 }
