@@ -5,7 +5,7 @@ class vssd_foldertop
 private:
 	
 public:
-	tool_path nowpath;
+	tool_path nowpath; 
 	vssd_folder* root;
 	vssd_folder* getnowposition();  
 	void shownowpositionforcmd();
