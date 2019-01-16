@@ -13,8 +13,8 @@ void tool_vcmd::vcd(vssd_foldertop * mytop)
 }
 //当下文件夹下rd
 void tool_vcmd::vrd(vssd & myvssd) {
-	if (myvssd.getnowtop()->nowpath.realfolderlength >= 3) {
-		myvssd.getnowtop()->nowpath.realfolders[myvssd.getnowtop()->nowpath.realfolderlength - 2]->deletone(myvssd.getnowtop()->getnowposition());
+	if (myvssd.getnowtop()->nowpath.realfolders.size() >= 3) {
+		myvssd.getnowtop()->nowpath.realfolders.at(myvssd.getnowtop()->nowpath.realfolders.size() - 2)->deletone(myvssd.getnowtop()->getnowposition());
 
 		myvssd.getnowtop()->nowpath.deletone(); 
 		std::cout << "VSSD ERROR : Nowposition folder is deleted just！" << std::endl;
@@ -30,8 +30,8 @@ void tool_vcmd::vrd(vssd & myvssd, std::string & rdcommand)
 {
 	tool_path a;
 	vssd_folder * folder = v_findpath(myvssd, rdcommand, a);
-	if (folder && a.folderlength >= 3) {
-		a.realfolders[a.realfolderlength - 2]->deletone(folder); 
+	if (folder && a.folders.size() >= 3) {
+		a.realfolders.at(a.realfolders.size() - 2)->deletone(folder); 
 	}
 	else {
 		std::cout << "VSSD ERROR : This folder is not exist! " << std::endl;
@@ -69,13 +69,13 @@ vssd_folder * tool_vcmd::v_findpath(vssd & myvssd, std::string & pathcommand, to
 	vssd_folder * longnowf = nowpath.getnow();	
 
 	int flag_tofirstif = 1;
-	for (int i = 0; i < path.folderlength; i++)
+	for (int i = 0; i < path.folders.size(); i++)
 	{
 		//说明是磁盘开头，则为绝对路径
 		if (flag_tofirstif && path.folders[i].length() == 2 && path.folders[i].at(1) == ':') {
-			nowpath.folderlength = 1;
-			nowpath.realfolderlength = 0;
-			nowpath.folders[0] = "";
+			nowpath.folders.clear(); 
+			nowpath.realfolders.clear();
+			nowpath.folders.push_back("");
 			nowpath.setrealpath(myvssd.getgenius(),0) ; 
 			longnowf = nowpath.getnow()->find(path.folders[i]);
 			if (!longnowf) {
@@ -84,8 +84,8 @@ vssd_folder * tool_vcmd::v_findpath(vssd & myvssd, std::string & pathcommand, to
 			nowpath.addone(longnowf);
 			flag_tofirstif = 0;
 		}
-		else if (path.folders[i] == "..") {
-			if (nowpath.realfolderlength < 3) {
+		else if (path.folders.at(i)== "..") {
+			if (nowpath.realfolders.size() < 3) {
 				return nullptr;
 			}
 			else {
@@ -93,7 +93,7 @@ vssd_folder * tool_vcmd::v_findpath(vssd & myvssd, std::string & pathcommand, to
 			}
 
 		}
-		else if (path.folders[i] == ".") {
+		else if (path.folders.at(i)== ".") {
 
 		}
 		//路径中非'n:' '..' '.'
@@ -135,7 +135,7 @@ void tool_vcmd::vren(vssd & myvssd, std::string & rencommand) {
 	
 
 
-	if (!myvssd.getnowtop()->nowpath.realfolders[myvssd.getnowtop()->nowpath.realfolderlength - 2]->find(rencommand)) {
+	if (!myvssd.getnowtop()->nowpath.realfolders.at(myvssd.getnowtop()->nowpath.realfolders.size() - 2)->find(rencommand)) {
 		if (myvssd.getnowtop()->getnowposition()->getname() != myvssd.getnowtop()->root->getname())
 			myvssd.getnowtop()->getnowposition()->setname(rencommand);
 	}
@@ -149,7 +149,7 @@ void tool_vcmd::vren(vssd & myvssd, std::string & rencommand) {
 void tool_vcmd::vren(vssd & myvssd, std::string & srccommand, std::string & disname) {
 	tool_path a;
 	vssd_folder * folder = v_findpath(myvssd, srccommand, a);
-	if (folder && a.folderlength > 2 && !(a.realfolders[a.realfolderlength-2]->find(disname))) {
+	if (folder && a.folders.size() > 2 && !(a.realfolders.at(a.realfolders.size()-2)->find(disname))) {
 		folder->setname(disname);
 	}
 	else {
@@ -187,8 +187,8 @@ void tool_vcmd::vmove(vssd & myvssd, std::string & src, std::string & dis) {
 	tool_path b;
 	vssd_folder * srcfolder = v_findpath(myvssd, src, a);
 	vssd_folder * disfolder = v_findpath(myvssd, dis, b);
-	if (srcfolder && disfolder && a.folderlength >= 3 && b.folderlength >= 2) {
-		a.realfolders[a.realfolderlength - 2]->offone(srcfolder);
+	if (srcfolder && disfolder && a.folders.size() >= 3 && b.folders.size() >= 2) {
+		a.realfolders.at(a.realfolders.size() - 2)->offone(srcfolder);
 		disfolder->vssd_folder_link(srcfolder);
 	}
 	else {

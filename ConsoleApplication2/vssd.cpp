@@ -18,12 +18,11 @@ void vssd::setnowtop(vssd_foldertop * afoldertop)
 
 void vssd::linktop(vssd_foldertop * anowtop)
 {
-	if (tabletops_length == 0) {
+	if (tops.size() == 0) {
 		nowtop = anowtop;
 	}
-	if (tabletops_length < tabletops_size) {
-		tops[tabletops_length] = anowtop;
-		tabletops_length++;
+	if (tops.size() < tops.max_size()) {
+		tops.push_back(anowtop);  
 	}
 	
 }
@@ -43,7 +42,7 @@ vssd::vssd()
  
 vssd_foldertop * vssd::findtop(std::string & aname)
 {
-	for (int i = 0; i < tabletops_length; i++)
+	for (int i = 0; i < tops.size(); i++)
 	{
 		if (aname == tops[i]->root->getname() ) {
 			return tops[i];

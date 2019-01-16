@@ -4,9 +4,7 @@ class vssd
 private:
 	std::string name;
 	vssd_foldertop *nowtop;
-	vssd_foldertop *tops[100];
-	int tabletops_size = 100;
-	int tabletops_length = 0;
+	std::vector<vssd_foldertop *> tops;  
 	vssd_folder *genius;
 public: 
 	vssd_foldertop *getnowtop();

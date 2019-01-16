@@ -18,8 +18,7 @@ public:
 	static void vren(vssd & myvssd, std::string & command);
 	static void vren(vssd & myvssd, std::string & srccommand, std::string & disname);
 	static void vcls();
-	static void v_jump(vssd & myvssd, std::string & jumpto);
-	static void vmove(vssd & myvssd, tool_path & dispath);
+	static void v_jump(vssd & myvssd, std::string & jumpto); 
 	
 	tool_vcmd();
 	~tool_vcmd();

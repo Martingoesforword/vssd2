@@ -10,18 +10,18 @@ vssd_folder * vssd_foldertop::getnowposition()
 
 void vssd_foldertop::shownowpositionforcmd() {
 	std::cout << "VSSD : Now at " ;
-	for (size_t i = 1; i < nowpath.folderlength; i++)
+	for (size_t i = 1; i < nowpath.folders.size(); i++)
 	{
-		std::cout << nowpath.realfolders[i]->getname() << '/';
+		std::cout << nowpath.realfolders.at(i)->getname() << '/';
 	}
 	
 	std::cout << " , you will say:";
 }
 void vssd_foldertop::shownowposition() {
 	std::cout << "VSSD : Now at ";
-	for (size_t i = 1; i < nowpath.folderlength; i++)
+	for (size_t i = 1; i < nowpath.folders.size(); i++)
 	{
-		std::cout<< nowpath.realfolders[i]->getname() << '/';
+		std::cout<< nowpath.realfolders.at(i)->getname() << '/';
 	}
 	std::cout << std::endl;
 }
@@ -42,7 +42,7 @@ void vssd_foldertop::newroot(vssd_folder * aroot)
 vssd_folder * vssd_foldertop::find(tool_path & apath)		
 {
 	vssd_folder * nowfolder = getnowposition();
-	for (int i = 0; i < apath.folderlength; i++)
+	for (int i = 0; i < apath.folders.size(); i++)
 	{
 		nowfolder = nowfolder->find(apath.folders[i]);
 		if (!nowfolder) {
