@@ -127,7 +127,7 @@ void tool_vcmd::vcd(vssd & myvssd, std::string & cdcommand)
 {
 	tool_path a;
 	vssd_folder * folder = v_findpath(myvssd, cdcommand, a);
-	if (folder->isFile()) {
+	if (folder && folder->isFile()) {
 		std::cout << "VSSD ERROR : This folder is not exist!" << std::endl;
 		return;
 	}
@@ -182,11 +182,11 @@ void tool_vcmd::vmd(vssd & myvssd, std::string & mdcommand)
 	
 	if (!folder) {
 		a.pathtofolders(mdcommand);
-		if (a.folders[0].at(1) != ':') {
-			myvssd.getnowtop()->getnowposition()->build(a);
+		if (a.folders[0].length() > 1 && a.folders[0].at(1) != ':') {
+			myvssd.getnowtop()->getnowposition()->build(myvssd,a);
 		}
 		else {
-			myvssd.getgenius()->build(a);
+			myvssd.getgenius()->build(myvssd,a);
 		}
 		 
 	}

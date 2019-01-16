@@ -33,10 +33,10 @@ std::string vssd_folder::getname()
 	return name;
 }
 
-void vssd_folder::build(tool_path &a) {
+void vssd_folder::build(vssd & myvssd, tool_path &a) {
 	 
 	 
-	vssd_folder *now = this;
+	vssd_folder *now = myvssd.getnowtop()->getnowposition();
 	int flag = 0;
 	for (int i = 0; i < a.folders.size(); i++)
 	{	
@@ -71,7 +71,7 @@ void vssd_folder::showoffsub() {
 	defeatfolder:
 		
 		if (subfolders.at(p) != NULL) {
-			std::cout << subfolders.at(p)->name <<"\t\t<"<< subfolders [p]->gettype()<< ">\t" << subfolders[p]->content.size()*16 << "Byte\t"<< std::endl;
+			std::cout << subfolders.at(p)->name <<"\t\t<"<< subfolders [p]->gettype()<< ">\t" << subfolders[p]->content.size()* sizeof(unsigned char)<< "Byte\t"<< std::endl;
 		}
 		else { p++; goto defeatfolder;}
 		p++;
@@ -232,7 +232,19 @@ void vssd_folder::setcontent(unsigned char byte)		//追加字符
 		std::cout << "Can not write to or read from a folder or a link" << std:: endl;
 	}
 }
-
+void vssd_folder::setcontentstring(std::string str)		//追加字符
+{
+	if (isFile()) {
+		for (int i = 0; i < str.length(); i++)
+		{
+			content.push_back(str.at(i));
+		}
+		
+	}
+	else {
+		std::cout << "Can not write to or read from a folder or a link" << std::endl;
+	}
+}
 unsigned char vssd_folder::readcontent()			//返回NULL 和 下一个字符
 {
 	static int index = -1;

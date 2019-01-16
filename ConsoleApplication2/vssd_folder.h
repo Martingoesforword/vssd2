@@ -14,7 +14,7 @@ public:
 	vssd_folder(std::string name, int code); 
 	void vssd_folder_link(vssd_folder * linktosub);
 	std::string getname();
-	void build(tool_path & a); 
+	void build(vssd & myvssd, tool_path & a); 
 	void vssd_folder_init();  
 	void showoffsub();
 	void deletone(vssd_folder *deletfolder);
@@ -29,6 +29,7 @@ public:
 	std::vector<unsigned char> content;		//ÎÄ¼şÄÚÈİ 
 	bool isFile();
 	void setcontent(unsigned char byte);
+	void setcontentstring(std::string str);
 	unsigned char readcontent();
 	~vssd_folder();
 };
