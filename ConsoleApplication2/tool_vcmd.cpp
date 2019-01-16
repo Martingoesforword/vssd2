@@ -180,7 +180,7 @@ void tool_vcmd::vmd(vssd & myvssd, std::string & mdcommand)
 	 
 	
 	
-	if (!folder) {
+	if (!folder)    {
 		a.pathtofolders(mdcommand);
 		if (a.folders[0].length() > 1 && a.folders[0].at(1) != ':') {
 			myvssd.getnowtop()->getnowposition()->build(myvssd,a);
