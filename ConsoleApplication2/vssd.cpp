@@ -53,11 +53,12 @@ vssd_foldertop * vssd::findtop(std::string & aname)
 
 void vssd::puttorealfile(FILE * d)
 {
-
+	//按照文档上的格式保存二进制
 }
 
 void vssd::getfromrealfile(FILE * d)
 {
+	//按照文档上的格式读取二进制
 }
  
 

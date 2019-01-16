@@ -71,7 +71,7 @@ void vssd_folder::showoffsub() {
 	defeatfolder:
 		
 		if (subfolders.at(p) != NULL) {
-			std::cout << subfolders.at(p)->name <<"\t<"<< subfolders [p]->gettype()<<">\tÎŞ´óĞ¡"<< std::endl;
+			std::cout << subfolders.at(p)->name <<"\t\t<"<< subfolders [p]->gettype()<< ">\t" << subfolders[p]->content.size()*16 << "Byte\t"<< std::endl;
 		}
 		else { p++; goto defeatfolder;}
 		p++;

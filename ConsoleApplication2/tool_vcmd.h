@@ -19,7 +19,10 @@ public:
 	static void vren(vssd & myvssd, std::string & srccommand, std::string & disname);
 	static void vcls();
 	static void v_jump(vssd & myvssd, std::string & jumpto); 
-	
+	static void vsave(vssd & myvssd, std::string & jumpto);
+	static void vload(vssd & myvssd, std::string & jumpto);
+	static void vdel(vssd & myvssd, std::string & delcommand);
+	static void vcopy(vssd & myvssd , std::string & src, std::string & dis);
 	tool_vcmd();
 	~tool_vcmd();
 };
