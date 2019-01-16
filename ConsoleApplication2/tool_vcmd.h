@@ -22,7 +22,8 @@ public:
 	static void vsave(vssd & myvssd, std::string & jumpto);
 	static void vload(vssd & myvssd, std::string & jumpto);
 	static void vdel(vssd & myvssd, std::string & delcommand);
-	static void vcopy(vssd & myvssd , std::string & src, std::string & dis);
+	static void vcopy(vssd & myvssd , std::string & src, std::string & dis); 
+	static void vmklink(vssd & myvssd, std::string & src, std::string & dis);
 	tool_vcmd();
 	~tool_vcmd();
 };

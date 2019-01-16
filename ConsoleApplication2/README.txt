@@ -8,24 +8,24 @@ rd finished
 cd finished
 
 
-del
+del finished
 
-copy
+copy finished
 
-ren 文件夹完成
+ren finished
 
-move  文件夹完成
+move  finished
 
-mklink  
-
-
-cls  完成
+mklink  finished
 
 
-save  
+cls finished
 
 
-load
+save  框架已搭好
+
+
+load  框架已搭好
 
 
 

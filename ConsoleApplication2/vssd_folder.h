@@ -27,10 +27,7 @@ public:
 	std::string vssdtypename[3] = { "FILE","FOLDER", "LINK" };
 	int vssdtypecode;    //0 file 1 folder 2 link
 	std::vector<unsigned char> content;		//ÎÄ¼şÄÚÈİ 
-	bool isFile() {
-		if (!vssdtypecode) return true;
-		else return false;
-	}
+	bool isFile();
 	void setcontent(unsigned char byte);
 	unsigned char readcontent();
 	~vssd_folder();

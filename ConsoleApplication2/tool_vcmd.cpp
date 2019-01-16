@@ -177,10 +177,7 @@ void tool_vcmd::vmd(vssd & myvssd, std::string & mdcommand)
 	tool_path a;
 
 	vssd_folder * folder = v_findpath(myvssd, mdcommand, a);
-	if (folder->isFile()) {
-		std::cout << "VSSD ERROR : This folder is not exist!" << std::endl;
-		return;
-	}
+	 
 	
 	
 	if (!folder) {
@@ -287,6 +284,30 @@ void tool_vcmd::vcopy(vssd & myvssd, std::string & src, std::string & dis)
 	}
 }
 
+void tool_vcmd::vmklink(vssd & myvssd, std::string & src, std::string & linkname)
+{
+	tool_path a; 
+	//找到需要指向的文件夹
+	vssd_folder * srcfolder = v_findpath(myvssd, src, a); 
+
+	if (srcfolder && a.folders.size() >= 3 ) {
+		//找到之后
+		vmd(myvssd, linkname);
+
+
+
+		//创建link文件
+		vssd_folder *link = myvssd.getnowtop()->getnowposition()->find(linkname);
+		link->vssdtypecode = 2;
+		 //找到创建的link文件
+		link->vssd_folder_link(srcfolder);
+		//将link文件第一个子文件放入指向文件
+	}
+	else {
+		std::cout << "VSSD ERROR : This folder is not exist! " << std::endl;
+	}
+}
+
  
 void tool_vcmd::comein(vssd & myvssd, std::string & cmdcommand)
 {
@@ -327,6 +348,24 @@ void tool_vcmd::comein(vssd & myvssd, std::string & cmdcommand)
 		vssd_tool::trim(rear);
 		 
 		vsave(myvssd, rear);
+
+	}
+	//mklink命令解析
+	else if (cmdcommand.length() > 6 && cmdcommand.substr(0, 6).compare("mklink") == 0) {
+
+		rear = cmdcommand.substr(6, cmdcommand.length() - 6);
+		int spacepos = rear.find(" ", 1);
+		if (spacepos != -1) {
+
+			std::string rearsrc = rear.substr(0, spacepos);
+			std::string reardisname = rear.substr(spacepos + 1, rear.length() - spacepos);
+
+			vmklink(myvssd, rearsrc, reardisname);
+
+		}
+		 
+
+		 
 
 	}
 	//cd命令解析

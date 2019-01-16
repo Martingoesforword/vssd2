@@ -215,6 +215,14 @@ vssd_folder * vssd_folder::find(tool_path * apath, int pathpos)
 	 
 }
  
+bool vssd_folder::isFile()
+{
+	if (!vssdtypecode) return true;
+	else return false;
+		
+	 
+}
+
 void vssd_folder::setcontent(unsigned char byte)		//×·¼Ó×Ö·û
 {
 	if (isFile()) {
